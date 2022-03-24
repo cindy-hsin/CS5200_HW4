@@ -66,8 +66,17 @@ public class Inserter {
 		Restaurants restaurant8 = new Restaurants("restaurant8","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
 		Restaurants restaurant9 = new Restaurants("restaurant9","about restaurant","menu","hours",false,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company2);
 		Restaurants restaurant10 = new Restaurants("restaurant10","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company3);
-
-				
+		restaurant1 = restaurantsDao.create(restaurant1);
+		restaurant2 = restaurantsDao.create(restaurant2);
+		restaurant3 = restaurantsDao.create(restaurant3);
+		restaurant4 = restaurantsDao.create(restaurant4);
+		restaurant5 = restaurantsDao.create(restaurant5);
+		restaurant6 = restaurantsDao.create(restaurant6);
+		restaurant7 = restaurantsDao.create(restaurant7);
+		restaurant8 = restaurantsDao.create(restaurant8);
+		restaurant9 = restaurantsDao.create(restaurant9);
+		restaurant10 = restaurantsDao.create(restaurant10);
+		
 		
 		// READ/SELECT.
 		// dao.getxxxx <==> SELECT statement
@@ -90,9 +99,27 @@ public class Inserter {
 		
 		Companies cmpn1 = companiesDao.getCompanyByCompanyName("company1");
 		System.out.format("Reading company: name:%s about:%s\n",
-				cmpn1.getCompanyName(), cmpn1.getAbout()
+			cmpn1.getCompanyName(), cmpn1.getAbout()
 		);
 		
+		Restaurants rstrnt1 = restaurantsDao.getRestaurantById(1);
+		System.out.format("Reading restaurant by Id: id:%s name:%s description:%s\n",
+				rstrnt1.getRestaurantId(),rstrnt1.getName(), rstrnt1.getDescription()
+		);
+		
+		List<Restaurants> rstrntList1 = restaurantsDao.getRestaurantsByCuisine(Restaurants.Cuisine.valueOf("HISPANIC"));
+		for (Restaurants r: rstrntList1 ) {
+			System.out.format("Reading restaurant by Cuisine: name:%s cuisine:%s\n",
+				r.getName(), r.getCuisin().name()
+			);
+		}
+		
+		List<Restaurants> rstrntList2 = restaurantsDao.getRestaurantsByCompanyName("company1");
+		for (Restaurants r: rstrntList2 ) {
+			System.out.format("Reading restaurant: name:%s company:%s\n",
+				r.getName(), r.getCompany().getCompanyName()
+			);
+		}
 		
 		// UPDATE
 		// dao.updatexxxx <==> UPDATE statement
@@ -112,6 +139,7 @@ public class Inserter {
 		usersDao.delete(user6);
 		creditCardsDao.delete(creditCard1);
 		companiesDao.delete(companyX);
+		restaurantsDao.delete(restaurant8);
 
 		
 	}
