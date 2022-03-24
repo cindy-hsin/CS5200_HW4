@@ -22,6 +22,7 @@ public class Inserter {
 		CreditCardsDao creditCardsDao = CreditCardsDao.getInstance();
 		CompaniesDao companiesDao = CompaniesDao.getInstance();
 		RestaurantsDao restaurantsDao = RestaurantsDao.getInstance();
+		SitDownRestaurantsDao sdrDao = SitDownRestaurantsDao.getInstance();
 		
 		// INSERT objects from our model.
 		// dao.create <==> INSERT statement 
@@ -55,10 +56,19 @@ public class Inserter {
 		company2 = companiesDao.create(company2);
 		company3 = companiesDao.create(company3);
 		companyX = companiesDao.create(companyX);
-				
-		Restaurants restaurant1 = new Restaurants("restaurant1","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AFRICAN"),"street1","street2","seattle","wa",98195,company1);
-		Restaurants restaurant2 = new Restaurants("restaurant2","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","seattle","wa",98195,company1);
-		Restaurants restaurant3 = new Restaurants("restaurant3","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("ASIAN"),"street1","street2","seattle","wa",98195,company1);
+
+
+		SitDownRestaurants sdr1 = new SitDownRestaurants("restaurant1","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AFRICAN"),"street1","street2","seattle","wa",98195,company1, 100);
+		SitDownRestaurants sdr2= new SitDownRestaurants("restaurant2","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","seattle","wa",98195,company1, 200);
+		SitDownRestaurants sdr3 = new SitDownRestaurants("restaurant3","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("ASIAN"),"street1","street2","seattle","wa",98195,company1, 200);
+		sdr1 = sdrDao.create(sdr1);
+		sdr2 = sdrDao.create(sdr2);
+		sdr3 = sdrDao.create(sdr3);
+		
+		
+//		Restaurants restaurant1 = new Restaurants("restaurant1","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AFRICAN"),"street1","street2","seattle","wa",98195,company1);
+//		Restaurants restaurant2 = new Restaurants("restaurant2","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","seattle","wa",98195,company1);
+//		Restaurants restaurant3 = new Restaurants("restaurant3","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("ASIAN"),"street1","street2","seattle","wa",98195,company1);
 		Restaurants restaurant4 = new Restaurants("restaurant4","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("EUROPEAN"),"street1","street2","seattle","wa",98195,company1);
 		Restaurants restaurant5 = new Restaurants("restaurant5","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","seattle","wa",98195,company1);
 		Restaurants restaurant6 = new Restaurants("restaurant6","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
@@ -66,9 +76,9 @@ public class Inserter {
 		Restaurants restaurant8 = new Restaurants("restaurant8","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
 		Restaurants restaurant9 = new Restaurants("restaurant9","about restaurant","menu","hours",false,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company2);
 		Restaurants restaurant10 = new Restaurants("restaurant10","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company3);
-		restaurant1 = restaurantsDao.create(restaurant1);
-		restaurant2 = restaurantsDao.create(restaurant2);
-		restaurant3 = restaurantsDao.create(restaurant3);
+//		restaurant1 = restaurantsDao.create(restaurant1);
+//		restaurant2 = restaurantsDao.create(restaurant2);
+//		restaurant3 = restaurantsDao.create(restaurant3);
 		restaurant4 = restaurantsDao.create(restaurant4);
 		restaurant5 = restaurantsDao.create(restaurant5);
 		restaurant6 = restaurantsDao.create(restaurant6);
@@ -76,6 +86,7 @@ public class Inserter {
 		restaurant8 = restaurantsDao.create(restaurant8);
 		restaurant9 = restaurantsDao.create(restaurant9);
 		restaurant10 = restaurantsDao.create(restaurant10);
+		
 		
 		
 		// READ/SELECT.
@@ -102,24 +113,35 @@ public class Inserter {
 			cmpn1.getCompanyName(), cmpn1.getAbout()
 		);
 		
-		Restaurants rstrnt1 = restaurantsDao.getRestaurantById(1);
+		Restaurants rstrnt1 = restaurantsDao.getRestaurantById(10);
 		System.out.format("Reading restaurant by Id: id:%s name:%s description:%s\n",
 				rstrnt1.getRestaurantId(),rstrnt1.getName(), rstrnt1.getDescription()
 		);
-		
 		List<Restaurants> rstrntList1 = restaurantsDao.getRestaurantsByCuisine(Restaurants.Cuisine.valueOf("HISPANIC"));
 		for (Restaurants r: rstrntList1 ) {
 			System.out.format("Reading restaurant by Cuisine: name:%s cuisine:%s\n",
 				r.getName(), r.getCuisin().name()
 			);
 		}
-		
 		List<Restaurants> rstrntList2 = restaurantsDao.getRestaurantsByCompanyName("company1");
 		for (Restaurants r: rstrntList2 ) {
-			System.out.format("Reading restaurant: name:%s company:%s\n",
+			System.out.format("Reading restaurant by CompanyName: id:%s,name:%s company:%s\n",
+				r.getRestaurantId(),r.getName(), r.getCompany().getCompanyName()
+			);
+		}
+		
+		SitDownRestaurants sdr = sdrDao.getSitDownRestaurantById(2);
+		System.out.format("Reading SitDownRestaurant by Id: id:%s name:%s capacity:%s\n",
+				sdr.getRestaurantId(),sdr.getName(), sdr.getCapacity()
+		);
+		
+		List<SitDownRestaurants> sdrList = sdrDao.getSitDownRestaurantsByCompanyName("company1");
+		for (Restaurants r: sdrList) {
+			System.out.format("Reading SitDownRestaurant by CompanyName: name:%s company:%s\n",
 				r.getName(), r.getCompany().getCompanyName()
 			);
 		}
+		
 		
 		// UPDATE
 		// dao.updatexxxx <==> UPDATE statement
@@ -140,7 +162,7 @@ public class Inserter {
 		creditCardsDao.delete(creditCard1);
 		companiesDao.delete(companyX);
 		restaurantsDao.delete(restaurant8);
-
+		sdrDao.delete(sdr2);
 		
 	}
 }

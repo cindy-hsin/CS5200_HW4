@@ -25,20 +25,21 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 	
 	public SitDownRestaurants create(SitDownRestaurants sdr) throws SQLException {
 		// Insert into the superclass table first.
-		create(new Restaurants(
+		Restaurants restaurant = create(new Restaurants(
 		 sdr.getName(), sdr.getDescription(),sdr.getMenu(),
 		 sdr.getHours(), sdr.isActive(), sdr.getCuisin(),sdr.getStreet1(),
 		 sdr.getStreet2(),sdr.getCity(),sdr.getState(),sdr.getZip(),
 		 sdr.getCompany()
 		));
 
-		String insertSitDownRestaurant = "INSERT INTO SitDownRestaurants(RestaurantId,Capacity) VALUES(?,?);";
+		String insertSitDownRestaurant = "INSERT INTO SitDownRestaurant(RestaurantId,Capacity) VALUES(?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		try {
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertSitDownRestaurant);
-			insertStmt.setInt(1, sdr.getRestaurantId());
+			
+			insertStmt.setInt(1, restaurant.getRestaurantId());
 			insertStmt.setInt(2, sdr.getCapacity());
 			insertStmt.executeUpdate();
 			return sdr;
@@ -58,9 +59,9 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 	public SitDownRestaurants getSitDownRestaurantById(int sitDownRestaurantId) throws SQLException {
 		String selectSdr = "SELECT Restaurants.RestaurantId AS RestaurantId, Name,Description,Menu,Hours,Active,"
 				+ "CuisineType,Street1,Street2,City,State,Zip,CompanyName, Capacity"
-				+ " FROM SitDownRestaurants INNER JOIN Restaurants ON "
-				+ "Restaurants.RestaurantId = SitDownRestaurants.RestaurantId "
-				+ "WHERE SitDownRestaurants.RestaurantId=?";
+				+ " FROM SitDownRestaurant INNER JOIN Restaurants ON "
+				+ "Restaurants.RestaurantId = SitDownRestaurant.RestaurantId "
+				+ "WHERE SitDownRestaurant.RestaurantId=?";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -114,9 +115,10 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 	}
 	
 	public List<SitDownRestaurants> getSitDownRestaurantsByCompanyName(String companyName) throws SQLException {
-		String selectSdr = "SELECT Restaurants.RestaurantId AS RestaurantId, Capacity, CompanyName"
-				+ " FROM SitDownRestaurants INNER JOIN Restaurants ON "
-				+ "Restaurants.RestaurantId = SitDownRestaurants.RestaurantId "
+		String selectSdr = "SELECT Restaurants.RestaurantId AS RestaurantId, Name,Description,Menu,Hours,Active,"
+				+ "CuisineType,Street1,Street2,City,State,Zip,CompanyName, Capacity"
+				+ " FROM SitDownRestaurant INNER JOIN Restaurants ON "
+				+ "Restaurants.RestaurantId = SitDownRestaurant.RestaurantId "
 				+ "WHERE CompanyName=?";
 		
 		Connection connection = null;
@@ -169,7 +171,7 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 				results.close();
 			}
 		}
-		return null;
+		return sdrs;
 	}
 	
 	
