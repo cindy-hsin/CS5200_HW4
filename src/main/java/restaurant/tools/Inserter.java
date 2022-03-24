@@ -23,6 +23,7 @@ public class Inserter {
 		CompaniesDao companiesDao = CompaniesDao.getInstance();
 		RestaurantsDao restaurantsDao = RestaurantsDao.getInstance();
 		SitDownRestaurantsDao sdrDao = SitDownRestaurantsDao.getInstance();
+		TakeOutRestaurantsDao torDao = TakeOutRestaurantsDao.getInstance();
 		
 		// INSERT objects from our model.
 		// dao.create <==> INSERT statement 
@@ -65,12 +66,17 @@ public class Inserter {
 		sdr2 = sdrDao.create(sdr2);
 		sdr3 = sdrDao.create(sdr3);
 		
+		TakeOutRestaurants tor1 = new TakeOutRestaurants("restaurant4","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("EUROPEAN"),"street1","street2","seattle","wa",98195,company1, 60);
+		TakeOutRestaurants tor2 = new TakeOutRestaurants("restaurant5","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","seattle","wa",98195,company1, 90);
+		tor1 = torDao.create(tor1);
+		tor2 = torDao.create(tor2);
+		
 		
 //		Restaurants restaurant1 = new Restaurants("restaurant1","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AFRICAN"),"street1","street2","seattle","wa",98195,company1);
 //		Restaurants restaurant2 = new Restaurants("restaurant2","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","seattle","wa",98195,company1);
 //		Restaurants restaurant3 = new Restaurants("restaurant3","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("ASIAN"),"street1","street2","seattle","wa",98195,company1);
-		Restaurants restaurant4 = new Restaurants("restaurant4","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("EUROPEAN"),"street1","street2","seattle","wa",98195,company1);
-		Restaurants restaurant5 = new Restaurants("restaurant5","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","seattle","wa",98195,company1);
+//		Restaurants restaurant4 = new Restaurants("restaurant4","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("EUROPEAN"),"street1","street2","seattle","wa",98195,company1);
+//		Restaurants restaurant5 = new Restaurants("restaurant5","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","seattle","wa",98195,company1);
 		Restaurants restaurant6 = new Restaurants("restaurant6","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
 		Restaurants restaurant7 = new Restaurants("restaurant7","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
 		Restaurants restaurant8 = new Restaurants("restaurant8","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
@@ -79,8 +85,8 @@ public class Inserter {
 //		restaurant1 = restaurantsDao.create(restaurant1);
 //		restaurant2 = restaurantsDao.create(restaurant2);
 //		restaurant3 = restaurantsDao.create(restaurant3);
-		restaurant4 = restaurantsDao.create(restaurant4);
-		restaurant5 = restaurantsDao.create(restaurant5);
+//		restaurant4 = restaurantsDao.create(restaurant4);
+//		restaurant5 = restaurantsDao.create(restaurant5);
 		restaurant6 = restaurantsDao.create(restaurant6);
 		restaurant7 = restaurantsDao.create(restaurant7);
 		restaurant8 = restaurantsDao.create(restaurant8);
@@ -125,7 +131,7 @@ public class Inserter {
 		}
 		List<Restaurants> rstrntList2 = restaurantsDao.getRestaurantsByCompanyName("company1");
 		for (Restaurants r: rstrntList2 ) {
-			System.out.format("Reading restaurant by CompanyName: id:%s,name:%s company:%s\n",
+			System.out.format("Reading restaurant by CompanyName: id:%s name:%s company:%s\n",
 				r.getRestaurantId(),r.getName(), r.getCompany().getCompanyName()
 			);
 		}
@@ -137,10 +143,23 @@ public class Inserter {
 		
 		List<SitDownRestaurants> sdrList = sdrDao.getSitDownRestaurantsByCompanyName("company1");
 		for (Restaurants r: sdrList) {
-			System.out.format("Reading SitDownRestaurant by CompanyName: name:%s company:%s\n",
-				r.getName(), r.getCompany().getCompanyName()
+			System.out.format("Reading SitDownRestaurant by CompanyName: id:%s name:%s company:%s\n",
+				r.getRestaurantId(),r.getName(), r.getCompany().getCompanyName()
 			);
 		}
+		
+		TakeOutRestaurants tor = torDao.getTakeOutRestaurantById(5);
+		System.out.format("Reading TakeOutRestaurant by Id: id:%s name:%s maxWaitTime:%s\n",
+				tor.getRestaurantId(),tor.getName(), tor.getMaxWaitTime()
+		);
+		
+		List<TakeOutRestaurants> torList = torDao.getTakeOutRestaurantsByCompanyName("company1");
+		for (Restaurants r: torList) {
+			System.out.format("Reading TakeOutRestaurant by CompanyName: id:%s name:%s company:%s\n",
+				r.getRestaurantId(),r.getName(), r.getCompany().getCompanyName()
+			);
+		}
+		
 		
 		
 		// UPDATE
@@ -163,6 +182,6 @@ public class Inserter {
 		companiesDao.delete(companyX);
 		restaurantsDao.delete(restaurant8);
 		sdrDao.delete(sdr2);
-		
+		torDao.delete(tor2);
 	}
 }

@@ -10,42 +10,39 @@ import java.util.List;
 
 import restaurant.model.*;
 
-public class SitDownRestaurantsDao extends RestaurantsDao{
+public class TakeOutRestaurantsDao extends RestaurantsDao{
 
-	private static SitDownRestaurantsDao instance = null;
-	protected  SitDownRestaurantsDao() {
+	private static TakeOutRestaurantsDao instance = null;
+	protected  TakeOutRestaurantsDao() {
 		super();
 	}
-	public static SitDownRestaurantsDao getInstance() {
+	public static TakeOutRestaurantsDao getInstance() {
 		if(instance == null) {
-			instance = new SitDownRestaurantsDao();
+			instance = new TakeOutRestaurantsDao();
 		}
 		return instance;
 	}
 	
-	public SitDownRestaurants create(SitDownRestaurants sdr) throws SQLException {
+	public TakeOutRestaurants create(TakeOutRestaurants tor) throws SQLException {
 		// Insert into the superclass table first.
-		// Need to return the created restaurant, in order to retrieve the auto-generated Id later.
 		Restaurants restaurant = create(new Restaurants(
-		 sdr.getName(), sdr.getDescription(),sdr.getMenu(),
-		 sdr.getHours(), sdr.isActive(), sdr.getCuisin(),sdr.getStreet1(),
-		 sdr.getStreet2(),sdr.getCity(),sdr.getState(),sdr.getZip(),
-		 sdr.getCompany()
+		 tor.getName(), tor.getDescription(),tor.getMenu(),
+		 tor.getHours(), tor.isActive(), tor.getCuisin(),tor.getStreet1(),
+		 tor.getStreet2(),tor.getCity(),tor.getState(),tor.getZip(),
+		 tor.getCompany()
 		));
 
-		String insertSitDownRestaurant = "INSERT INTO SitDownRestaurant(RestaurantId,Capacity) VALUES(?,?);";
+		String insertTakeOutRestaurant = "INSERT INTO TakeOutRestaurant(RestaurantId,MaxWaitTime) VALUES(?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertSitDownRestaurant);
+			insertStmt = connection.prepareStatement(insertTakeOutRestaurant);
 			
-			// NOTE: The restaurantId should be retrieved from the parent object we just created,
-			// to keep consistency between parent and child.
 			insertStmt.setInt(1, restaurant.getRestaurantId());
-			insertStmt.setInt(2, sdr.getCapacity());
+			insertStmt.setInt(2, tor.getMaxWaitTime());
 			insertStmt.executeUpdate();
-			return sdr;
+			return tor;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -59,20 +56,20 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 		}
 	}
 	
-	public SitDownRestaurants getSitDownRestaurantById(int sitDownRestaurantId) throws SQLException {
-		String selectSdr = "SELECT Restaurants.RestaurantId AS RestaurantId, Name,Description,Menu,Hours,Active,"
-				+ "CuisineType,Street1,Street2,City,State,Zip,CompanyName, Capacity"
-				+ " FROM SitDownRestaurant INNER JOIN Restaurants ON "
-				+ "Restaurants.RestaurantId = SitDownRestaurant.RestaurantId "
-				+ "WHERE SitDownRestaurant.RestaurantId=?";
+	public TakeOutRestaurants getTakeOutRestaurantById(int takeOutRestaurantId) throws SQLException {
+		String selectTor = "SELECT Restaurants.RestaurantId AS RestaurantId, Name,Description,Menu,Hours,Active,"
+				+ "CuisineType,Street1,Street2,City,State,Zip,CompanyName, MaxWaitTime"
+				+ " FROM TakeOutRestaurant INNER JOIN Restaurants ON "
+				+ "Restaurants.RestaurantId = TakeOutRestaurant.RestaurantId "
+				+ "WHERE TakeOutRestaurant.RestaurantId=?";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
 		
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectSdr);
-			selectStmt.setInt(1, sitDownRestaurantId);
+			selectStmt = connection.prepareStatement(selectTor);
+			selectStmt.setInt(1, takeOutRestaurantId);
 			results = selectStmt.executeQuery();
 			
 			CompaniesDao companiesDao = CompaniesDao.getInstance();
@@ -94,11 +91,11 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 				String companyName = results.getString("CompanyName");
 				Companies company = companiesDao.getCompanyByCompanyName(companyName);
 				
-				int capacity = results.getInt("Capacity");
+				int maxWaitTime = results.getInt("MaxWaitTime");
 				
-				SitDownRestaurants sdr = new SitDownRestaurants(resultId, name, description,
-						menu, hours, active, resultCuisine, street1, street2, city, state, zip, company, capacity);
-				return sdr;
+				TakeOutRestaurants tor = new TakeOutRestaurants(resultId, name, description,
+						menu, hours, active, resultCuisine, street1, street2, city, state, zip, company, maxWaitTime);
+				return tor;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,22 +114,22 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 		return null;
 	}
 	
-	public List<SitDownRestaurants> getSitDownRestaurantsByCompanyName(String companyName) throws SQLException {
-		String selectSdr = "SELECT Restaurants.RestaurantId AS RestaurantId, Name,Description,Menu,Hours,Active,"
-				+ "CuisineType,Street1,Street2,City,State,Zip,CompanyName, Capacity"
-				+ " FROM SitDownRestaurant INNER JOIN Restaurants ON "
-				+ "Restaurants.RestaurantId = SitDownRestaurant.RestaurantId "
+	public List<TakeOutRestaurants> getTakeOutRestaurantsByCompanyName(String companyName) throws SQLException {
+		String selectTor = "SELECT Restaurants.RestaurantId AS RestaurantId, Name,Description,Menu,Hours,Active,"
+				+ "CuisineType,Street1,Street2,City,State,Zip,CompanyName, MaxWaitTime"
+				+ " FROM TakeOutRestaurant INNER JOIN Restaurants ON "
+				+ "Restaurants.RestaurantId = TakeOutRestaurant.RestaurantId "
 				+ "WHERE CompanyName=?";
 		
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
 		
-		List<SitDownRestaurants> sdrs = new ArrayList<SitDownRestaurants>();
+		List<TakeOutRestaurants> tors = new ArrayList<TakeOutRestaurants>();
 		CompaniesDao companiesDao = CompaniesDao.getInstance();
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectSdr);
+			selectStmt = connection.prepareStatement(selectTor);
 			selectStmt.setString(1, companyName);
 			results = selectStmt.executeQuery();
 			
@@ -154,11 +151,11 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 				String resultCompanyName = results.getString("CompanyName");
 				Companies company = companiesDao.getCompanyByCompanyName(resultCompanyName);
 				
-				int capacity = results.getInt("Capacity");
+				int maxWaitTime = results.getInt("MaxWaitTime");
 				
-				SitDownRestaurants sdr = new SitDownRestaurants(restaurantId, name, description,
-						menu, hours, active, resultCuisine, street1, street2, city, state, zip, company, capacity);
-				sdrs.add(sdr);
+				TakeOutRestaurants tor = new TakeOutRestaurants(restaurantId, name, description,
+						menu, hours, active, resultCuisine, street1, street2, city, state, zip, company, maxWaitTime);
+				tors.add(tor);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -174,14 +171,14 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 				results.close();
 			}
 		}
-		return sdrs;
+		return tors;
 	}
 	
 	
 	
-	public SitDownRestaurants delete(SitDownRestaurants sitDownRestaurant) throws SQLException {
+	public TakeOutRestaurants delete(TakeOutRestaurants takeOutRestaurant) throws SQLException {
 		try {
-			super.delete(sitDownRestaurant);
+			super.delete(takeOutRestaurant);
 			return null;
 		} catch (SQLException e) {
 			e.printStackTrace();

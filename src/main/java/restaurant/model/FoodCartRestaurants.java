@@ -11,9 +11,8 @@ public class FoodCartRestaurants extends Restaurants{
 		this.licensed = licensed;
 	}
 
-	public FoodCartRestaurants(int restaurantId, boolean licensed) {
+	public FoodCartRestaurants(int restaurantId) {
 		super(restaurantId);
-		this.licensed = licensed;
 	}
 
 	public FoodCartRestaurants(String name, String description, String menu, String hours, boolean active,

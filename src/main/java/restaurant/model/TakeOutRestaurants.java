@@ -11,9 +11,8 @@ public class TakeOutRestaurants extends Restaurants{
 		this.maxWaitTime = maxWaitTime;
 	}
 
-	public TakeOutRestaurants(int restaurantId, int maxWaitTime) {
+	public TakeOutRestaurants(int restaurantId) {
 		super(restaurantId);
-		this.maxWaitTime = maxWaitTime;
 	}
 
 	public TakeOutRestaurants(String name, String description, String menu, String hours, boolean active,
