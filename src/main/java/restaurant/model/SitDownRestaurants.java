@@ -11,9 +11,8 @@ public class SitDownRestaurants extends Restaurants{
 		this.capacity = capacity;
 	}
 
-	public SitDownRestaurants(int restaurantId, int capacity) {
+	public SitDownRestaurants(int restaurantId) {
 		super(restaurantId);
-		this.capacity = capacity;
 	}
 
 	public SitDownRestaurants(String name, String description, String menu, String hours, boolean active, Cuisine cuisine,
