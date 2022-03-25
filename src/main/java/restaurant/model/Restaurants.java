@@ -66,7 +66,7 @@ public class Restaurants {
 
 
 	public int getRestaurantId() {
-		return restaurantId;
+		return this.restaurantId;
 	}
 
 

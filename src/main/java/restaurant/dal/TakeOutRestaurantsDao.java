@@ -42,6 +42,9 @@ public class TakeOutRestaurantsDao extends RestaurantsDao{
 			insertStmt.setInt(1, restaurant.getRestaurantId());
 			insertStmt.setInt(2, tor.getMaxWaitTime());
 			insertStmt.executeUpdate();
+			
+			// NOTE: Remember to set the passed-in sdr's Id as well, before returning!
+			tor.setRestaurantId(restaurant.getRestaurantId());
 			return tor;
 		} catch (SQLException e) {
 			e.printStackTrace();

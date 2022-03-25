@@ -1,16 +1,17 @@
 package restaurant.model;
 
 import java.util.Date;
+import java.math.BigDecimal;
 
 public class Reviews {
 	protected int reviewId;
 	protected Date created;
 	protected String content;
-	protected float rating;
+	protected BigDecimal rating;
 	protected Users user;
 	protected Restaurants restaurant;
 	
-	public Reviews(int reviewId, Date created, String content, float rating, Users user, Restaurants restaurant) {
+	public Reviews(int reviewId, Date created, String content, BigDecimal rating, Users user, Restaurants restaurant) {
 		this.reviewId = reviewId;
 		this.created = created;
 		this.content = content;
@@ -25,7 +26,7 @@ public class Reviews {
 	}
 
 
-	public Reviews(Date created, String content, float rating, Users user, Restaurants restaurant) {
+	public Reviews(Date created, String content, BigDecimal rating, Users user, Restaurants restaurant) {
 		this.created = created;
 		this.content = content;
 		this.rating = rating;
@@ -33,6 +34,16 @@ public class Reviews {
 		this.restaurant = restaurant;
 	}
 
+	
+	// This constructor is used when user creates
+	// a new Review with the default "created" value(current time stamp,
+	// which is enforced in MySQL). 
+	public Reviews(String content, BigDecimal rating, Users user, Restaurants restaurant) {
+		this.content = content;
+		this.rating = rating;
+		this.user = user;
+		this.restaurant = restaurant;
+	}
 
 	public int getReviewId() {
 		return reviewId;
@@ -64,12 +75,12 @@ public class Reviews {
 	}
 
 
-	public float getRating() {
+	public BigDecimal getRating() {
 		return rating;
 	}
 
 
-	public void setRating(float rating) {
+	public void setRating(BigDecimal rating) {
 		this.rating = rating;
 	}
 

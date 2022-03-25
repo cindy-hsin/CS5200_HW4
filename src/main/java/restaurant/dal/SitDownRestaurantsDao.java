@@ -42,9 +42,14 @@ public class SitDownRestaurantsDao extends RestaurantsDao{
 			
 			// NOTE: The restaurantId should be retrieved from the parent object we just created,
 			// to keep consistency between parent and child.
+			// System.out.println("In SitDownRestaurantsDao create(): "+restaurant.getRestaurantId());
 			insertStmt.setInt(1, restaurant.getRestaurantId());
 			insertStmt.setInt(2, sdr.getCapacity());
 			insertStmt.executeUpdate();
+			
+			sdr.setRestaurantId(restaurant.getRestaurantId());
+			// NOTE: Remember to set the passed-in sdr's Id as well, before returning!
+			// System.out.println("In SitDownRestaurantsDao create(): "+sdr.getRestaurantId());
 			return sdr;
 		} catch (SQLException e) {
 			e.printStackTrace();

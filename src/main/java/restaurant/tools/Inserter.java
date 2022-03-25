@@ -3,8 +3,10 @@ package restaurant.tools;
 import restaurant.dal.*;
 import restaurant.model.*;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -24,6 +26,7 @@ public class Inserter {
 		RestaurantsDao restaurantsDao = RestaurantsDao.getInstance();
 		SitDownRestaurantsDao sdrDao = SitDownRestaurantsDao.getInstance();
 		TakeOutRestaurantsDao torDao = TakeOutRestaurantsDao.getInstance();
+		ReviewsDao reviewsDao = ReviewsDao.getInstance();
 		
 		// INSERT objects from our model.
 		// dao.create <==> INSERT statement 
@@ -63,7 +66,10 @@ public class Inserter {
 		SitDownRestaurants sdr2= new SitDownRestaurants("restaurant2","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","seattle","wa",98195,company1, 200);
 		SitDownRestaurants sdr3 = new SitDownRestaurants("restaurant3","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("ASIAN"),"street1","street2","seattle","wa",98195,company1, 200);
 		sdr1 = sdrDao.create(sdr1);
+		// System.out.println("!!! sdr1:"+ sdr1.getName()+ " " + sdr1.getRestaurantId());
+
 		sdr2 = sdrDao.create(sdr2);
+		// System.out.println("!!! sdr2:"+ sdr2.getName()+ " " + sdr1.getRestaurantId());
 		sdr3 = sdrDao.create(sdr3);
 		
 		TakeOutRestaurants tor1 = new TakeOutRestaurants("restaurant4","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("EUROPEAN"),"street1","street2","seattle","wa",98195,company1, 60);
@@ -92,6 +98,11 @@ public class Inserter {
 		restaurant8 = restaurantsDao.create(restaurant8);
 		restaurant9 = restaurantsDao.create(restaurant9);
 		restaurant10 = restaurantsDao.create(restaurant10);
+		
+		
+		Reviews review1 = new Reviews("Delightful!",BigDecimal.valueOf(5.0),user1,sdr1);
+		review1 = reviewsDao.create(review1);
+		
 		
 		
 		
