@@ -6,7 +6,6 @@ import restaurant.model.*;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -26,7 +25,9 @@ public class Inserter {
 		RestaurantsDao restaurantsDao = RestaurantsDao.getInstance();
 		SitDownRestaurantsDao sdrDao = SitDownRestaurantsDao.getInstance();
 		TakeOutRestaurantsDao torDao = TakeOutRestaurantsDao.getInstance();
+		FoodCartRestaurantsDao fcrDao = FoodCartRestaurantsDao.getInstance();
 		ReviewsDao reviewsDao = ReviewsDao.getInstance();
+		RecommendationsDao recommendationsDao = RecommendationsDao.getInstance();
 		
 		// INSERT objects from our model.
 		// dao.create <==> INSERT statement 
@@ -67,7 +68,6 @@ public class Inserter {
 		SitDownRestaurants sdr3 = new SitDownRestaurants("restaurant3","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("ASIAN"),"street1","street2","seattle","wa",98195,company1, 200);
 		sdr1 = sdrDao.create(sdr1);
 		// System.out.println("!!! sdr1:"+ sdr1.getName()+ " " + sdr1.getRestaurantId());
-
 		sdr2 = sdrDao.create(sdr2);
 		// System.out.println("!!! sdr2:"+ sdr2.getName()+ " " + sdr1.getRestaurantId());
 		sdr3 = sdrDao.create(sdr3);
@@ -78,36 +78,58 @@ public class Inserter {
 		tor2 = torDao.create(tor2);
 		
 		
+		FoodCartRestaurants fcr1 = new FoodCartRestaurants("restaurant6","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2, true);
+		FoodCartRestaurants fcr2 = new FoodCartRestaurants("restaurant7","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2,true);
+		FoodCartRestaurants fcr3 = new FoodCartRestaurants("restaurant8","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2,true);
+		FoodCartRestaurants fcr4 = new FoodCartRestaurants("restaurant9","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company2,true);
+		FoodCartRestaurants fcr5 = new FoodCartRestaurants("restaurant10","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company3,false);
+		fcr1 = fcrDao.create(fcr1);
+		fcr2 = fcrDao.create(fcr2);
+		fcr3 = fcrDao.create(fcr3);
+		fcr4 = fcrDao.create(fcr4);
+		fcr5 = fcrDao.create(fcr5);
+		
+		
 //		Restaurants restaurant1 = new Restaurants("restaurant1","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AFRICAN"),"street1","street2","seattle","wa",98195,company1);
 //		Restaurants restaurant2 = new Restaurants("restaurant2","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","seattle","wa",98195,company1);
 //		Restaurants restaurant3 = new Restaurants("restaurant3","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("ASIAN"),"street1","street2","seattle","wa",98195,company1);
 //		Restaurants restaurant4 = new Restaurants("restaurant4","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("EUROPEAN"),"street1","street2","seattle","wa",98195,company1);
 //		Restaurants restaurant5 = new Restaurants("restaurant5","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","seattle","wa",98195,company1);
-		Restaurants restaurant6 = new Restaurants("restaurant6","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
-		Restaurants restaurant7 = new Restaurants("restaurant7","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
-		Restaurants restaurant8 = new Restaurants("restaurant8","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
-		Restaurants restaurant9 = new Restaurants("restaurant9","about restaurant","menu","hours",false,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company2);
-		Restaurants restaurant10 = new Restaurants("restaurant10","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company3);
+//		Restaurants restaurant6 = new Restaurants("restaurant6","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
+//		Restaurants restaurant7 = new Restaurants("restaurant7","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
+//		Restaurants restaurant8 = new Restaurants("restaurant8","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("HISPANIC"),"street1","street2","bellevue","wa",98008,company2);
+//		Restaurants restaurant9 = new Restaurants("restaurant9","about restaurant","menu","hours",false,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company2);
+//		Restaurants restaurant10 = new Restaurants("restaurant10","about restaurant","menu","hours",true,Restaurants.Cuisine.valueOf("AMERICAN"),"street1","street2","bellevue","wa",98008,company3);
 //		restaurant1 = restaurantsDao.create(restaurant1);
 //		restaurant2 = restaurantsDao.create(restaurant2);
 //		restaurant3 = restaurantsDao.create(restaurant3);
 //		restaurant4 = restaurantsDao.create(restaurant4);
 //		restaurant5 = restaurantsDao.create(restaurant5);
-		restaurant6 = restaurantsDao.create(restaurant6);
-		restaurant7 = restaurantsDao.create(restaurant7);
-		restaurant8 = restaurantsDao.create(restaurant8);
-		restaurant9 = restaurantsDao.create(restaurant9);
-		restaurant10 = restaurantsDao.create(restaurant10);
+//		restaurant6 = restaurantsDao.create(restaurant6);
+//		restaurant7 = restaurantsDao.create(restaurant7);
+//		restaurant8 = restaurantsDao.create(restaurant8);
+//		restaurant9 = restaurantsDao.create(restaurant9);
+//		restaurant10 = restaurantsDao.create(restaurant10);
 		
 		
 		Reviews review1 = new Reviews("Delightful!",BigDecimal.valueOf(5.0),user1,sdr1);
 		Reviews review2 = new Reviews("Superb!",BigDecimal.valueOf(5.0),user1,sdr2);
-		Reviews review3 = new Reviews("Superb!",BigDecimal.valueOf(5.0),user1, restaurant9);
-		Reviews review4 = new Reviews("Not good",BigDecimal.valueOf(1.0),user4,restaurant9);
+		Reviews review3 = new Reviews("Superb!",BigDecimal.valueOf(5.0),user1, fcr4);
+		Reviews review4 = new Reviews("Not good",BigDecimal.valueOf(1.0),user4,fcr4);
 		review1 = reviewsDao.create(review1);
 		review2 = reviewsDao.create(review2);
 		review3 = reviewsDao.create(review3);
 		review4 = reviewsDao.create(review4);
+		
+		Recommendations recommendation1 = new Recommendations(user1, sdr1);
+		Recommendations recommendation2 = new Recommendations(user1, sdr2);
+		Recommendations recommendation3 = new Recommendations(user3, sdr3);
+		Recommendations recommendation4 = new Recommendations(user2, sdr3);
+		recommendation1 = recommendationsDao.create(recommendation1);
+		recommendation2 = recommendationsDao.create(recommendation2);
+		recommendation3 = recommendationsDao.create(recommendation3);
+		recommendation4 = recommendationsDao.create(recommendation4);
+
 
 		// READ/SELECT.
 		// dao.getxxxx <==> SELECT statement
@@ -189,10 +211,31 @@ public class Inserter {
 		
 		List<Reviews> reviewList2 = reviewsDao.getReviewsByRestaurantId(9);
 		for (Reviews r: reviewList2) {
-			System.out.format("Reading Reviews by UserName: Reviewid:%s content:%s username:%s restaurantId:%s\n",
+			System.out.format("Reading Reviews by RestaurantId: Reviewid:%s content:%s username:%s restaurantId:%s\n",
 				r.getReviewId(), r.getContent(), r.getUser().getUserName(), r.getRestaurant().getRestaurantId()
 			);
 		}
+		
+		Recommendations recommendation = recommendationsDao.getRecommendationById(4);
+		System.out.format("Reading Recommendation by Id: id:%s username:%s restaurantId:%s\n",
+			recommendation.getRecommendationId(), 
+			recommendation.getUser().getUserName(), recommendation.getRestaurant().getRestaurantId()
+		);
+		
+		List<Recommendations> recommendationList1 = recommendationsDao.getRecommendationsByUserName("Bruce");
+		for (Recommendations r: recommendationList1) {
+			System.out.format("Reading Recommendations by UserName: RecommendationId:%s username:%s restaurantId:%s\n",
+				r.getRecommendationId(), r.getUser().getUserName(), r.getRestaurant().getRestaurantId()
+			);
+		}
+		
+		List<Recommendations> recommendationList2 = recommendationsDao.getRecommendationsByRestaurantId(3);
+		for (Recommendations r: recommendationList2) {
+			System.out.format("Reading Recommendations by RestaurantId: Recommendationid:%s username:%s restaurantId:%s\n",
+				r.getRecommendationId(), r.getUser().getUserName(), r.getRestaurant().getRestaurantId()
+			);
+		}
+		
 
 
 		// UPDATE
@@ -213,9 +256,11 @@ public class Inserter {
 		usersDao.delete(user6);
 		creditCardsDao.delete(creditCard1);
 		companiesDao.delete(companyX);
-		restaurantsDao.delete(restaurant8);
+		restaurantsDao.delete(fcr3);
 		sdrDao.delete(sdr2);
 		torDao.delete(tor2);
+		fcrDao.delete(fcr5);
 		reviewsDao.delete(review2);
+		recommendationsDao.delete(recommendation2);
 	}
 }
