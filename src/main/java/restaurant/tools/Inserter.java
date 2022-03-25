@@ -102,9 +102,12 @@ public class Inserter {
 		
 		Reviews review1 = new Reviews("Delightful!",BigDecimal.valueOf(5.0),user1,sdr1);
 		Reviews review2 = new Reviews("Superb!",BigDecimal.valueOf(5.0),user1,sdr2);
+		Reviews review3 = new Reviews("Superb!",BigDecimal.valueOf(5.0),user1, restaurant9);
+		Reviews review4 = new Reviews("Not good",BigDecimal.valueOf(1.0),user4,restaurant9);
 		review1 = reviewsDao.create(review1);
 		review2 = reviewsDao.create(review2);
-		
+		review3 = reviewsDao.create(review3);
+		review4 = reviewsDao.create(review4);
 
 		// READ/SELECT.
 		// dao.getxxxx <==> SELECT statement
@@ -177,8 +180,21 @@ public class Inserter {
 			review.getUser().getUserName(), review.getRestaurant().getRestaurantId()
 		);
 		
+		List<Reviews> reviewList1 = reviewsDao.getReviewsByUserName("Bruce");
+		for (Reviews r: reviewList1) {
+			System.out.format("Reading Reviews by UserName: Reviewid:%s content:%s username:%s restaurantId:%s\n",
+				r.getReviewId(), r.getContent(), r.getUser().getUserName(), r.getRestaurant().getRestaurantId()
+			);
+		}
 		
-		
+		List<Reviews> reviewList2 = reviewsDao.getReviewsByRestaurantId(9);
+		for (Reviews r: reviewList2) {
+			System.out.format("Reading Reviews by UserName: Reviewid:%s content:%s username:%s restaurantId:%s\n",
+				r.getReviewId(), r.getContent(), r.getUser().getUserName(), r.getRestaurant().getRestaurantId()
+			);
+		}
+
+
 		// UPDATE
 		// dao.updatexxxx <==> UPDATE statement
 		creditCardsDao.updateExpiration(creditCard2, new Date());
@@ -200,5 +216,6 @@ public class Inserter {
 		restaurantsDao.delete(restaurant8);
 		sdrDao.delete(sdr2);
 		torDao.delete(tor2);
+		reviewsDao.delete(review2);
 	}
 }

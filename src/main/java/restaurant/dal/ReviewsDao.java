@@ -6,14 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import blog.dal.BlogPostsDao;
-import blog.model.BlogComments;
-import blog.model.BlogPosts;
 import restaurant.model.*;
 
 public class ReviewsDao {
@@ -182,11 +179,81 @@ public class ReviewsDao {
 		return reviews;
 	
 	}
-//	public List<Reviews> getReviewsByRestaurantId(int restaurantId) {
-//		
-//	}
-//	public Reviews delete(Reviews review) {
-//		
-//	}
+	
+	public List<Reviews> getReviewsByRestaurantId(int restaurantId) throws SQLException {
+		String selectReview =
+				"SELECT ReviewId,Created,Content,Rating,UserName,RestaurantId " +
+				"FROM Reviews " +
+				"WHERE RestaurantId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		List<Reviews> reviews = new ArrayList<Reviews>();
+		
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectReview);
+			selectStmt.setInt(1, restaurantId);
+			results = selectStmt.executeQuery();
+			
+			UsersDao usersDao = UsersDao.getInstance();
+			RestaurantsDao restaurantsDao = RestaurantsDao.getInstance();
+			
+			while(results.next()) {
+				int reviewId = results.getInt("ReviewId");
+				Date created =  new Date(results.getTimestamp("Created").getTime());
+				String content = results.getString("Content");
+				BigDecimal rating = results.getBigDecimal("Rating");
+				String userName = results.getString("UserName");
+				
+				int resultRestaurantId = results.getInt("RestaurantId");
+				
+				
+				Users user = usersDao.getUserByUserName(userName);
+				Restaurants restaurant = restaurantsDao.getRestaurantById(resultRestaurantId);
+				Reviews review = new Reviews(reviewId, created, content, rating, user, restaurant);
+				reviews.add(review);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return reviews;
+	}
+	
+	public Reviews delete(Reviews review) throws SQLException {
+		String deleteReview = "DELETE FROM Reviews WHERE ReviewId=?;";
+		Connection connection = null;
+		PreparedStatement deleteStmt = null;
+		try {
+			connection = connectionManager.getConnection();
+			deleteStmt = connection.prepareStatement(deleteReview);
+			deleteStmt.setInt(1, review.getReviewId());
+			deleteStmt.executeUpdate();
+
+			// Return null so the caller can no longer operate on the BlogComments instance.
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(deleteStmt != null) {
+				deleteStmt.close();
+			}
+		}
+	}
 	
 }
