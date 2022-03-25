@@ -16,13 +16,13 @@ import restaurant.model.*;
 public class ReservationsDao {
 	protected ConnectionManager connectionManager;
 
-	private static ReviewsDao instance = null;
+	private static ReservationsDao instance = null;
 	protected ReservationsDao() {
 		connectionManager = new ConnectionManager();
 	}
-	public static ReviewsDao getInstance() {
+	public static ReservationsDao getInstance() {
 		if(instance == null) {
-			instance = new ReviewsDao();
+			instance = new ReservationsDao();
 		}
 		return instance;
 	}
@@ -30,7 +30,7 @@ public class ReservationsDao {
 
 	public Reservations create(Reservations reservation) throws SQLException {
 		String insertReservation  =
-				"INSERT INTO Reviews(Start,End,Size,UserName,RestaurantId) " +
+				"INSERT INTO Reservations(Start,End,Size,UserName,RestaurantId) " +
 				"VALUES(?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
@@ -45,8 +45,8 @@ public class ReservationsDao {
 			insertStmt.setTimestamp(1, new Timestamp(reservation.getStart().getTime()));
 			insertStmt.setTimestamp(2, new Timestamp(reservation.getEnd().getTime()));
 			insertStmt.setInt(3, reservation.getSize());
-			insertStmt.setString(3, reservation.getUser().getUserName());
-			insertStmt.setInt(4, reservation.getRestaurant().getRestaurantId());
+			insertStmt.setString(4, reservation.getUser().getUserName());
+			insertStmt.setInt(5, reservation.getRestaurant().getRestaurantId());
 
 			
 			insertStmt.executeUpdate();

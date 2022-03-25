@@ -28,6 +28,7 @@ public class Inserter {
 		FoodCartRestaurantsDao fcrDao = FoodCartRestaurantsDao.getInstance();
 		ReviewsDao reviewsDao = ReviewsDao.getInstance();
 		RecommendationsDao recommendationsDao = RecommendationsDao.getInstance();
+		ReservationsDao reservationsDao = ReservationsDao.getInstance();
 		
 		// INSERT objects from our model.
 		// dao.create <==> INSERT statement 
@@ -130,6 +131,20 @@ public class Inserter {
 		recommendation3 = recommendationsDao.create(recommendation3);
 		recommendation4 = recommendationsDao.create(recommendation4);
 
+		DateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date start = formatter2.parse("2015-09-19 18:30:00");
+		Date end = formatter2.parse("2015-09-19 20:00:00");
+				
+
+		Reservations reservation1 = new Reservations(start,end,2,user1,sdr1);
+		Reservations reservation2 = new Reservations(start,end,2,user1,sdr2);
+		Reservations reservation3 = new Reservations(start,end,2,user2,sdr1);
+		Reservations reservation4 = new Reservations(start,end,2,user2,sdr3);
+		reservation1 = reservationsDao.create(reservation1);
+		reservation2 = reservationsDao.create(reservation2);
+		reservation3 = reservationsDao.create(reservation3);
+		reservation4 = reservationsDao.create(reservation4);
+		
 
 		// READ/SELECT.
 		// dao.getxxxx <==> SELECT statement
@@ -236,6 +251,27 @@ public class Inserter {
 			);
 		}
 		
+		Reservations reservation = reservationsDao.getReservationById(4);
+		System.out.format("Reading Reservation by Id: id:%s start: %s end:%s size:%s username:%s restaurantId:%s\n",
+			reservation.getReservationId(), reservation.getStart(), reservation.getEnd(),reservation.getSize(),
+			reservation.getUser().getUserName(), reservation.getRestaurant().getRestaurantId()
+		);
+		
+		List<Reservations> reservationList1 = reservationsDao.getReservationsByUserName("Bruce");
+		for (Reservations r: reservationList1) {
+			System.out.format("Reading Reservation by UserName: id:%s username:%s restaurantId:%s\n",
+					r.getReservationId(),
+					r.getUser().getUserName(), r.getRestaurant().getRestaurantId()
+				);
+		}
+		
+		List<Reservations> reservationList2 = reservationsDao.getReservationsBySitDownRestaurantId(1);
+		for (Reservations r: reservationList2) {
+			System.out.format("Reading Reservation by RestaurantId: id:%s username:%s restaurantId:%s\n",
+					r.getReservationId(), 
+					r.getUser().getUserName(), r.getRestaurant().getRestaurantId()
+				);
+		}
 
 
 		// UPDATE
@@ -262,5 +298,6 @@ public class Inserter {
 		fcrDao.delete(fcr5);
 		reviewsDao.delete(review2);
 		recommendationsDao.delete(recommendation2);
+		reservationsDao.delete(reservation4);
 	}
 }
