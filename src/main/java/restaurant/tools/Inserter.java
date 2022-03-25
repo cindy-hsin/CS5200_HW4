@@ -101,11 +101,11 @@ public class Inserter {
 		
 		
 		Reviews review1 = new Reviews("Delightful!",BigDecimal.valueOf(5.0),user1,sdr1);
+		Reviews review2 = new Reviews("Superb!",BigDecimal.valueOf(5.0),user1,sdr2);
 		review1 = reviewsDao.create(review1);
+		review2 = reviewsDao.create(review2);
 		
-		
-		
-		
+
 		// READ/SELECT.
 		// dao.getxxxx <==> SELECT statement
 		Users u1 = usersDao.getUserByUserName("James");
@@ -170,6 +170,12 @@ public class Inserter {
 				r.getRestaurantId(),r.getName(), r.getCompany().getCompanyName()
 			);
 		}
+		
+		Reviews review = reviewsDao.getReviewById(2);
+		System.out.format("Reading Review by Id: id:%s created:%s content:%s username:%s restaurantId:%s\n",
+			review.getReviewId(), review.getCreated(), review.getContent(),
+			review.getUser().getUserName(), review.getRestaurant().getRestaurantId()
+		);
 		
 		
 		

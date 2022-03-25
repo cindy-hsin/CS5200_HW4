@@ -1,12 +1,19 @@
 package restaurant.dal;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import blog.dal.BlogPostsDao;
+import blog.model.BlogComments;
+import blog.model.BlogPosts;
 import restaurant.model.*;
 
 public class ReviewsDao {
@@ -71,16 +78,110 @@ public class ReviewsDao {
 				resultKey.close();
 			}
 		}
-	}
-		
+	}		
 
 
-	public Reviews getReviewById(int reviewId) {
+	public Reviews getReviewById(int reviewId) throws SQLException {
+		String selectReview =
+				"SELECT ReviewId,Created,Content,Rating,UserName,RestaurantId " +
+				"FROM Reviews " +
+				"WHERE ReviewId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
 		
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectReview);
+			selectStmt.setInt(1, reviewId);
+			results = selectStmt.executeQuery();
+			
+			UsersDao usersDao = UsersDao.getInstance();
+			RestaurantsDao restaurantsDao = RestaurantsDao.getInstance();
+			if(results.next()) {
+				int resultReviewId = results.getInt("ReviewId");
+				Date created =  new Date(results.getTimestamp("Created").getTime());
+				String content = results.getString("Content");
+				BigDecimal rating = results.getBigDecimal("Rating");
+				String userName = results.getString("UserName");
+				
+				int restaurantId = results.getInt("RestaurantId");
+				
+				
+				Users user = usersDao.getUserByUserName(userName);
+				Restaurants restaurant = restaurantsDao.getRestaurantById(restaurantId);
+				Reviews review = new Reviews(resultReviewId, created, content, rating, user, restaurant);
+				return review;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
 	}
-//	public List<Reviews> getReviewsByUserName(String userName) {
-//		
-//	}
+	
+	
+	public List<Reviews> getReviewsByUserName(String userName) throws SQLException {
+		String selectReview =
+				"SELECT ReviewId,Created,Content,Rating,UserName,RestaurantId " +
+				"FROM Reviews " +
+				"WHERE UserName=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		List<Reviews> reviews = new ArrayList<Reviews>();
+		
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectReview);
+			selectStmt.setString(1, userName);
+			results = selectStmt.executeQuery();
+			
+			UsersDao usersDao = UsersDao.getInstance();
+			RestaurantsDao restaurantsDao = RestaurantsDao.getInstance();
+			
+			while(results.next()) {
+				int reviewId = results.getInt("ReviewId");
+				Date created =  new Date(results.getTimestamp("Created").getTime());
+				String content = results.getString("Content");
+				BigDecimal rating = results.getBigDecimal("Rating");
+				String resultUserName = results.getString("UserName");
+				
+				int restaurantId = results.getInt("RestaurantId");
+				
+				
+				Users user = usersDao.getUserByUserName(resultUserName);
+				Restaurants restaurant = restaurantsDao.getRestaurantById(restaurantId);
+				Reviews review = new Reviews(reviewId, created, content, rating, user, restaurant);
+				reviews.add(review);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return reviews;
+	
+	}
 //	public List<Reviews> getReviewsByRestaurantId(int restaurantId) {
 //		
 //	}
